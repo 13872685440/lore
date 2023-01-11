@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lore>
+	<LoreMark>
+		<query id="LoreMark_DelById">
+			<!-- isnative 非必要节点 默认为false -->
+			<isnative>false</isnative>
+			<sql>delete LoreMark o where
+				o.lore_id=:lore_id and
+				o.user_id=:user_id
+			</sql>
+			<parm>
+				<name id="user_id">
+					<type>String</type>
+				</name>
+				<name id="lore_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</LoreMark>
+</lore>

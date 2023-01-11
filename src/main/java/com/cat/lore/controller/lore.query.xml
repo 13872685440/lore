@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lore>
+	<LoreType>
+		<query id="LoreType_ByOrgId">
+			<isnative>false</isnative>
+			<sql>select o from LoreType o where o.organ_id=:organ_id
+
+			</sql>
+			<orderby>o.id asc</orderby>
+			<parm>
+				<name id="organ_id">
+					<type>String</type>
+				</name>
+
+			</parm>
+		</query>
+	</LoreType>
+
+	<Lore>
+		<query id="Lore_ByOrgId">
+			<isnative>false</isnative>
+			<sql>select o from Lore o where 1=1
+				and ( :organ_id like concat('%',
+				concat(o.org_id,'%')))
+
+				and
+				(:typeid is null or
+				:typeid='' or
+				o.lore_type like
+				concat(:typeid,'%'))
+
+				and
+				(:keyword is
+				null or
+				:keyword='' or
+				o.keyword
+				like
+				concat('%',concat(:keyword,'%'))
+				or
+				o.title like
+				concat('%',concat(:keyword,'%'))
+				)
+
+			</sql>
+			<orderby>o.id desc</orderby>
+			<parm>
+				<name id="organ_id">
+					<type>String</type>
+				</name>
+				<name id="keyword">
+					<type>String</type>
+				</name>
+				<name id="typeid">
+					<type>typeid</type>
+				</name>
+
+			</parm>
+		</query>
+	</Lore>
+	<FileRecord>
+		<query id="FileRecord_ByKey">
+			<isnative>false</isnative>
+			<sql>select o from FileRecord o where
+				o.keyValue=:keyValue and
+				o.ebcn=:ebcn
+			</sql>
+			<orderby>o.id desc</orderby>
+			<parm>
+				<name id="keyValue">
+					<type>String</type>
+				</name>
+				<name id="ebcn">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</FileRecord>
+
+	<UserLoreItg>
+		<query id="UserLoreItg_ByUserId">
+			<isnative>false</isnative>
+			<sql>select o from UserLoreItg o where o.user_id=:user_id
+			</sql>
+			<orderby>o.id asc</orderby>
+			<parm>
+				<name id="user_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</UserLoreItg>
+
+
+	<UserItgRcd>
+		<query id="UserItgRcd_has">
+			<isnative>false</isnative>
+			<sql>select o from UserItgRcd o where o.lore_id=:lore_id and
+				o.user_id=:user_id
+			</sql>
+			<orderby>o.id asc</orderby>
+			<parm>
+				<name id="lore_id">
+					<type>String</type>
+				</name>
+				<name id="user_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</UserItgRcd>
+
+	<LoreMark>
+		<query id="LoreMark_ifhas">
+			<isnative>false</isnative>
+			<sql>select o from LoreMark o where
+				o.lore_id=:lore_id and
+				o.user_id=:user_id
+			</sql>
+			<orderby>o.id desc</orderby>
+			<parm>
+				<name id="lore_id">
+					<type>String</type>
+				</name>
+				<name id="user_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+		<query id="LoreMark_mylist">
+			<isnative>false</isnative>
+			<sql>select o from Lore o where 1=1 and
+				o.id in (select a.lore_id from
+				LoreMark a where a.user_id=:user_id)
+				and
+				(:keyword is
+				null or
+				:keyword='' or
+				o.keyword
+				like
+				concat('%',concat(:keyword,'%'))
+				or
+				o.title like
+				concat('%',concat(:keyword,'%'))
+				)
+			</sql>
+			<orderby>o.id asc</orderby>
+			<parm>
+				<name id="keyword">
+					<type>String</type>
+				</name>
+				<name id="user_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</LoreMark>
+
+
+</lore>

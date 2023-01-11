@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lore>
+	<Lore>
+		<query id="Lore_mainQuery">
+			<sql>select o from Lore o where 1=1 and ( (:title is null or
+				:title
+				='')
+				or lower(o.title) like
+				concat('%',concat(lower(:title
+				)),'%'))
+				and
+				( (:content is null or
+				:content ='')
+				or lower(o.content)
+				like
+				concat('%',concat(lower(:content
+				)),'%'))
+				and (:keyword is null or
+				:keyword='' or
+				o.keyword
+				like concat(:keyword,'%'))
+
+			</sql>
+			<countsql>select count(o.id) from Lore o where 1=1 and (
+				(:title is
+				null or
+				:title ='')
+				or lower(o.title) like
+				concat('%',concat(lower(:title
+				)),'%'))
+				and ( (:content is null or
+				:content ='')
+				or lower(o.content)
+				like
+				concat('%',concat(lower(:content
+				)),'%'))
+				and (:keyword is null or
+				:keyword='' or
+				o.keyword
+				like concat(:keyword,'%'))
+
+
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>
+				o.lore_type asc,o.title asc
+			</orderby>
+			<parm>
+				<name id="title">
+					<type>String</type>
+				</name>
+				<name id="keyword">
+					<type>String</type>
+				</name>
+				<name id="content">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</Lore>
+	<LoreType>
+		<query id="LoreType_mainQuery">
+			<sql>select o from LoreType o where 1=1 and ( (:name is null or
+				:name
+				='')
+				or lower(o.name) like
+				concat('%',concat(lower(:name
+				)),'%'))
+				and
+				(:organ_id is null
+				or
+				:organ_id='' or
+				o.organ_id like
+				concat(:organ_id,'%'))
+			</sql>
+			<countsql>select count(o.id) from LoreType o where 1=1 and ( (:name
+				is
+				null or
+				:name
+				='')
+				or lower(o.name) like
+				concat('%',concat(lower(:name
+				)),'%'))
+				and (:organ_id is null
+				or
+				:organ_id='' or
+				o.organ_id like
+				concat(:organ_id,'%'))
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>
+				o.organ_id asc,o.name asc
+			</orderby>
+			<parm>
+				<name id="name">
+					<type>String</type>
+				</name>
+				<name id="organ_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</LoreType>
+
+	<UserLoreItg>
+		<query id="UserLoreItg_mainQuery">
+			<sql>select o from UserLoreItg o where 1=1
+				and (:organ_id is null or
+				:organ_id='' or
+				:organ_id like concat('%',
+				concat(o.organ_id,'%')))
+				and
+				(:user_name
+				is null or
+				:user_name='' or
+				o.user_name like concat('%',
+				concat(:user_name,'%')))
+
+			</sql>
+			<countsql>select count(o.id) from UserLoreItg o where 1=1
+				and (:organ_id is null or
+				:organ_id='' or
+				:organ_id like concat('%',
+				concat(o.organ_id,'%')))
+				and
+				(:user_name is null or
+				:user_name='' or
+				o.user_name like concat('%',
+				concat(:user_name,'%')))
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>o.organ_id asc,integral desc
+			</orderby>
+			<parm>
+				<name id="user_name">
+					<type>String</type>
+				</name>
+				<name id="organ_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</UserLoreItg>
+
+
+	<UserItgRcd>
+		<query id="UserItgRcd_mainQuery">
+			<sql>select o from UserItgRcd o where 1=1
+				and o.user_id=:user_id
+			</sql>
+			<countsql>select count(o.id) from UserLoreItg o where 1=1
+				and
+				o.user_id=:user_id
+
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>o.ct asc
+			</orderby>
+			<parm>
+				<name id="user_id">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</UserItgRcd>
+</lore>

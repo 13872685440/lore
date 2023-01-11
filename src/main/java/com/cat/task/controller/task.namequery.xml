@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task>
+	<ProcessStep>
+		<query id="ProcessStep_mainQuery">
+			<sql>select o from ProcessStep o where 1=1
+				and ( (:name is null or
+				:name ='')
+				or lower(o.name) like
+				concat('%',concat(lower(:name
+				)),'%'))
+				and (
+				(:code is null or :code
+				='')
+				or lower(o.id) like
+				concat(concat(lower(:code )),'%'))
+			</sql>
+			<countsql>select count(o.id) from ProcessStep o where 1=1
+				and ( (:name is null or
+				:name ='')
+				or lower(o.name) like
+				concat('%',concat(lower(:name
+				)),'%'))
+				and (
+				(:code is null or :code
+				='')
+				or lower(o.id) like
+				concat(concat(lower(:code )),'%'))
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>o.id asc</orderby>
+			<parm>
+				<name id="name">
+					<type>String</type>
+				</name>
+				<name id="code">
+					<type>String</type>
+				</name>
+			</parm>
+		</query>
+	</ProcessStep>
+	<TaskExt>
+		<query id="TaskExt_mainQuery">
+			<sql>select o from TaskExt o where 1=1 
+				and (((o.taskType in
+				('待办','挂起','已领取'))
+				and
+				((o.transactor = #userId#)))
+				or ((o.taskType in
+				('待办','待领取'))
+				and
+				(o.transactorgroups like
+				concat('%',concat(lower(#userId#)),'%'))))
+			</sql>
+			<countsql>select count(o.id) from TaskExt o where 1=1 
+				and
+				(((o.taskType in
+				('待办','挂起','已领取'))
+				and
+				((o.transactor = #userId#)))
+				or ((o.taskType in
+				('待办','待领取'))
+				and
+				(o.transactorgroups like
+				concat('%',concat(lower(#userId#)),'%'))))
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>o.ct desc</orderby>
+			<filter>
+				<name id="filter1">
+					<des>超时</des>
+					<sql> and (o.time_out &lt;=:dqsj)</sql>
+					<!-- elsource el表达式来源 用来解析el表达式 -->
+					<elsource>BaseQueryHelp</elsource>
+					<!-- el el表达式 用来判断是否加载该查询语句 -->
+					<el>equalparm('states','cs')</el>
+					<!-- parm 非必要节点 根据需要添加 -->
+					<parm>
+						<name id="dqsj">
+							<type>String</type>
+						</name>
+					</parm>
+				</name>
+				<name id="filter2">
+					<des>即将超时</des>
+					<sql> and (o.time_out &lt;=:jjdqsj) and (o.time_out &gt;:dqsj)</sql>
+					<!-- elsource el表达式来源 用来解析el表达式 -->
+					<elsource>BaseQueryHelp</elsource>
+					<!-- el el表达式 用来判断是否加载该查询语句 -->
+					<el>equalparm('states','jjcs')</el>
+					<!-- parm 非必要节点 根据需要添加 -->
+					<parm>
+						<name id="jjdqsj">
+							<type>String</type>
+						</name>
+						<name id="dqsj">
+							<type>String</type>
+						</name>
+					</parm>
+				</name>
+				<name id="filter3">
+					<des>待办</des>
+					<sql> and (o.time_out is null or o.time_out &gt;:jjdqsj)</sql>
+					<!-- elsource el表达式来源 用来解析el表达式 -->
+					<elsource>BaseQueryHelp</elsource>
+					<!-- el el表达式 用来判断是否加载该查询语句 -->
+					<el>equalparm('states','dbrw')</el>
+					<!-- parm 非必要节点 根据需要添加 -->
+					<parm>
+						<name id="jjdqsj">
+							<type>String</type>
+						</name>
+					</parm>
+				</name>
+			</filter>
+		</query>
+		<query id="TaskExt_yb_mainQuery">
+			<sql>select o from TaskExt o where 1=1 
+				and (o.taskType = '已办')
+				and
+				(o.transactor = #userId#)
+			</sql>
+			<countsql>select count(o.id) from TaskExt o where 1=1 
+				and (o.taskType = '已办')
+				and
+				(o.transactor = #userId#)
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>o.ct desc</orderby>
+		</query>
+	</TaskExt>
+	<Remind>
+		<query id="Remind_mainQuery">
+			<sql>select o from Remind o where 1=1 
+				
+				and
+				(o.jsr_id = #userId#)
+			</sql>
+			<countsql>select count(o.id) from Remind o where 1=1 
+				
+				and
+				(o.jsr_id = #userId#)
+			</countsql>
+			<!-- orderby 非必要节点 无默认值 -->
+			<orderby>o.ct desc</orderby>
+		</query>
+	</Remind>
+</task>
